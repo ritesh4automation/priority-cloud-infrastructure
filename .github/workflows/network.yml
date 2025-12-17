@@ -2,33 +2,41 @@ name: Terraform Network
 
 on:
   push:
+    branches: [ main ]
     paths:
       - 'accounts/**/network/**'
       - 'modules/vpc/**'
 
-permissions:
-  id-token: write
-  contents: read
-
 jobs:
-  terraform-plan-apply:
+  terraform-network:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        account: [dev-account-alpha]
+
+    permissions:
+      id-token: write
+      contents: read
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
+        uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: 1.7.0
+          terraform_version: 1.7.5
 
       - name: Configure AWS credentials via OIDC
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::223374428235:role/github-actions-oidc-role
           aws-region: ap-south-1
-          role-session-name: github-actions
+
+      - name: Verify AWS identity
+        run: aws sts get-caller-identity
+
+      - name: Terraform Init
+        working-directory: accounts/dev-account-alpha/network
+        run: terraform init -input=false
+
+      - name: Terraform Apply
+        working-directory: accounts/dev-account-alpha/network
+        run: terraform apply -auto-approve -input=false
