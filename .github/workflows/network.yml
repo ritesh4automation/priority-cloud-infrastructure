@@ -6,7 +6,7 @@ on:
     paths:
       - 'accounts/**/network/**'
       - 'modules/vpc/**'
-
+ workflow_dispatch:
 jobs:
   terraform-network:
     runs-on: ubuntu-latest
