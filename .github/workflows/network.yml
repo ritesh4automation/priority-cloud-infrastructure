@@ -1,0 +1,42 @@
+name: Terraform Network
+
+on:
+  push:
+    paths:
+      - 'accounts/**/network/**'
+      - 'modules/vpc/**'
+
+jobs:
+  terraform-plan-apply:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        account: [dev-account-alpha]
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.7.0
+
+      - name: Configure AWS credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::223374428235:role/github-actions-oidc-role
+          aws-region: ap-south-1
+          role-session-name: github-actions
+
+      - name: Terraform Init
+        working-directory: accounts/${{ matrix.account }}/network
+        run: terraform init -input=false
+
+      - name: Terraform Plan
+        working-directory: accounts/${{ matrix.account }}/network
+        run: terraform plan -out=tfplan -input=false
+
+      - name: Terraform Apply
+        working-directory: accounts/${{ matrix.account }}/network
+        run: terraform apply -input=false tfplan
