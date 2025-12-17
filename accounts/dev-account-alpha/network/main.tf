@@ -23,6 +23,6 @@ module "vpc" {
   azs             = ["ap-south-1a", "ap-south-1b"]
   tags = {
     Project = "PriorityCloud"
-    Owner   = "Ritesh"
+    Owner   = "Ritesh Pandey"
   }
 }
