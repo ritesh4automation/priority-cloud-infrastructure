@@ -6,6 +6,10 @@ on:
       - 'accounts/**/network/**'
       - 'modules/vpc/**'
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   terraform-plan-apply:
     runs-on: ubuntu-latest
@@ -28,15 +32,3 @@ jobs:
           role-to-assume: arn:aws:iam::223374428235:role/github-actions-oidc-role
           aws-region: ap-south-1
           role-session-name: github-actions
-
-      - name: Terraform Init
-        working-directory: accounts/${{ matrix.account }}/network
-        run: terraform init -input=false
-
-      - name: Terraform Plan
-        working-directory: accounts/${{ matrix.account }}/network
-        run: terraform plan -out=tfplan -input=false
-
-      - name: Terraform Apply
-        working-directory: accounts/${{ matrix.account }}/network
-        run: terraform apply -input=false tfplan
