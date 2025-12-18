@@ -1,40 +1,15 @@
-variable "vpc_name" {
-  type        = string
-  description = "Name of the VPC"
-}
-
-variable "vpc_cidr" {
-  type        = string
-  description = "CIDR block for the VPC"
+variable "cidr" {
+  type = string
 }
 
 variable "public_subnets" {
-  type        = list(string)
-  description = "List of public subnet CIDRs"
-}
-
-variable "private_subnets" {
-  type        = list(string)
-  description = "List of private subnet CIDRs"
+  type = list(string)
 }
 
 variable "azs" {
-  type        = list(string)
-  description = "Availability zones"
-}
-
-variable "env" {
-  type        = string
-  description = "Environment name (dev, prod, etc.)"
+  type = list(string)
 }
 
 variable "tags" {
-  type        = map(string)
-  default     = {}
-  description = "Additional tags"
-}
-
-variable "region" {
-  type        = string
-  description = "AWS region"
+  type = map(string)
 }
