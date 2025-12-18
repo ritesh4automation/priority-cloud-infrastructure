@@ -17,7 +17,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Configure AWS Credentials
+      - name: Configure AWS Credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::223374428235:role/github-actions-oidc-role
@@ -31,5 +31,9 @@ jobs:
         working-directory: accounts/dev-account-alpha/network
 
       - name: Terraform Plan
-        run: terraform plan
+        run: terraform plan -out=tfplan
+        working-directory: accounts/dev-account-alpha/network
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve tfplan
         working-directory: accounts/dev-account-alpha/network
