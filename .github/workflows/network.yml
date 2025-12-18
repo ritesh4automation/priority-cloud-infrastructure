@@ -2,8 +2,8 @@ name: Terraform Network
 
 on:
   push:
-    paths:
-      - "accounts/dev-account-alpha/network/**"
+    branches:
+      - main
 
 permissions:
   id-token: write
@@ -14,26 +14,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Configure AWS Credentials (OIDC)
-        uses: aws-actions/configure-aws-credentials@v4
+      - uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::223374428235:role/github-actions-oidc-role
           aws-region: ap-south-1
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+      - uses: hashicorp/setup-terraform@v3
 
-      - name: Terraform Init
-        run: terraform init
+      - run: terraform init
         working-directory: accounts/dev-account-alpha/network
 
-      - name: Terraform Plan
-        run: terraform plan -out=tfplan
+      - run: terraform plan -out=tfplan
         working-directory: accounts/dev-account-alpha/network
 
-      - name: Terraform Apply
-        run: terraform apply -auto-approve tfplan
+      - run: terraform apply -auto-approve tfplan
         working-directory: accounts/dev-account-alpha/network
