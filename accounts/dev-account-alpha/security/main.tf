@@ -30,7 +30,7 @@ module "web_sg" {
   ]
 
   tags = {
-    Environment = "dev"
+    Environment = "Dev"
     Service     = "security"
   }
 }
