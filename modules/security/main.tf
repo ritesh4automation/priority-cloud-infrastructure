@@ -27,6 +27,6 @@ resource "aws_security_group" "this" {
 
   tags = {
     Name        = var.security_group_name
-    Environment = "osdev"
+    Environment = "AWS-Dev"
   }
 }
