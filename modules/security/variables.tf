@@ -1,36 +1,37 @@
-variable "security_group_name" {
-  description = "Name of the security group"
+variable "vpc_id" {
   type        = string
+  description = "VPC ID from network stack"
+}
+
+variable "security_group_name" {
+  type        = string
+  description = "Security group name"
 }
 
 variable "description" {
+  type        = string
   description = "Security group description"
-  type        = string
-}
-
-variable "vpc_id" {
-  description = "VPC ID where security group will be created"
-  type        = string
 }
 
 variable "ingress_rules" {
-  description = "List of ingress rules"
-  type = list(object({
+  type        = list(object({
     from_port   = number
     to_port     = number
     protocol    = string
     cidr_blocks = list(string)
-    description = string
   }))
 }
 
 variable "egress_rules" {
-  description = "List of egress rules"
-  type = list(object({
+  type        = list(object({
     from_port   = number
     to_port     = number
     protocol    = string
     cidr_blocks = list(string)
-    description = string
   }))
+}
+
+variable "environment" {
+  type        = string
+  default     = "dev"
 }

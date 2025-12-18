@@ -7,12 +7,14 @@ on:
     paths:
       - "modules/security/**"
       - "accounts/dev-account-alpha/security/**"
+  workflow_dispatch:
 
 permissions:
   id-token: write
   contents: read
+
 concurrency:
-  group: terraform-${{ github.workflow }}-${{ github.ref }}
+  group: terraform-security-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -20,8 +22,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
