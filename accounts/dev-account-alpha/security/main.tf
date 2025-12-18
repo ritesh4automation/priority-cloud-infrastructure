@@ -1,8 +1,4 @@
-provider "aws" {
-  region = "ap-south-1"
-}
-
-# Fetch Network outputs
+# Fetch Network outputs dynamically
 data "terraform_remote_state" "network" {
   backend = "s3"
   config = {

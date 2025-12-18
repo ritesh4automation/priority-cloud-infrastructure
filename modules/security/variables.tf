@@ -14,7 +14,7 @@ variable "description" {
 }
 
 variable "ingress_rules" {
-  type        = list(object({
+  type = list(object({
     from_port   = number
     to_port     = number
     protocol    = string
@@ -23,7 +23,7 @@ variable "ingress_rules" {
 }
 
 variable "egress_rules" {
-  type        = list(object({
+  type = list(object({
     from_port   = number
     to_port     = number
     protocol    = string
@@ -32,6 +32,6 @@ variable "egress_rules" {
 }
 
 variable "environment" {
-  type        = string
-  default     = "dev"
+  type    = string
+  default = "dev"
 }
