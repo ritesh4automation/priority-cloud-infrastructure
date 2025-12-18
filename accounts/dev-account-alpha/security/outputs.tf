@@ -1,3 +1,4 @@
-output "web_sg_id" {
-  value = module.web_sg.id
+output "security_group_id" {
+  description = "Created security group ID"
+  value       = module.security.security_group_id
 }

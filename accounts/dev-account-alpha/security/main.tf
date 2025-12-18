@@ -1,36 +1,34 @@
-data "terraform_remote_state" "network" {
-  backend = "s3"
+module "security" {
+  source = "../../../modules/security"
 
-  config = {
-    bucket = "prioritycloudinfra-tf-state"
-    key    = "dev-account-alpha/network/terraform.tfstate"
-    region = "ap-south-1"
-  }
-}
-
-module "web_sg" {
-  source = "../../../modules/security_groups"
-
-  name   = "dev-web-sg"
-  vpc_id = data.terraform_remote_state.network.outputs.vpc_id
+  security_group_name = "dev-alpha-app-sg"
+  description         = "Security group for dev-account-alpha application"
+  vpc_id              = var.vpc_id
 
   ingress_rules = [
-    {
-      from_port   = 80
-      to_port     = 80
-      protocol    = "tcp"
-      cidr_blocks = ["0.0.0.0/0"]
-    },
     {
       from_port   = 22
       to_port     = 22
       protocol    = "tcp"
       cidr_blocks = ["0.0.0.0/0"]
+      description = "SSH access"
+    },
+    {
+      from_port   = 80
+      to_port     = 80
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+      description = "HTTP access"
     }
   ]
 
-  tags = {
-    Environment = "Dev"
-    Service     = "security"
-  }
+  egress_rules = [
+    {
+      from_port   = 0
+      to_port     = 0
+      protocol    = "-1"
+      cidr_blocks = ["0.0.0.0/0"]
+      description = "All outbound traffic"
+    }
+  ]
 }

@@ -5,8 +5,8 @@ on:
     branches:
       - main
     paths:
-      - "accounts/dev-account-alpha/security/**"
       - "modules/security/**"
+      - "accounts/dev-account-alpha/security/**"
 
 permissions:
   id-token: write
@@ -20,7 +20,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Configure AWS Credentials (OIDC)
+      - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::223374428235:role/github-actions-oidc-role
@@ -30,13 +30,13 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
-        run: terraform init
         working-directory: accounts/dev-account-alpha/security
+        run: terraform init
 
       - name: Terraform Plan
-        run: terraform plan -out=tfplan
         working-directory: accounts/dev-account-alpha/security
+        run: terraform plan -out=tfplan
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve tfplan
         working-directory: accounts/dev-account-alpha/security
+        run: terraform apply -auto-approve tfplan
