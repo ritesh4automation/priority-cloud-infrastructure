@@ -1,42 +1,42 @@
 name: Terraform Security
 
-
 on:
-push:
-branches:
-- main
-
+  push:
+    branches:
+      - main
+    paths:
+      - "accounts/dev-account-alpha/security/**"
+      - "modules/security/**"
 
 permissions:
-id-token: write
-contents: read
-
+  id-token: write
+  contents: read
 
 jobs:
-terraform:
-runs-on: ubuntu-latest
+  terraform:
+    runs-on: ubuntu-latest
 
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-steps:
-- uses: actions/checkout@v4
+      - name: Configure AWS Credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::223374428235:role/github-actions-oidc-role
+          aws-region: ap-south-1
 
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
 
-- uses: aws-actions/configure-aws-credentials@v4
-with:
-role-to-assume: arn:aws:iam::223374428235:role/github-actions-oidc-role
-aws-region: ap-south-1
+      - name: Terraform Init
+        run: terraform init
+        working-directory: accounts/dev-account-alpha/security
 
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
+        working-directory: accounts/dev-account-alpha/security
 
-- uses: hashicorp/setup-terraform@v3
-
-
-- run: terraform init
-working-directory: accounts/dev-account-alpha/security
-
-
-- run: terraform plan -out=tfplan
-working-directory: accounts/dev-account-alpha/security
-
-
-- run: terraform apply -auto-approve tfplan
-working-directory: accounts/dev-account-alpha/security
+      - name: Terraform Apply
+        run: terraform apply -auto-approve tfplan
+        working-directory: accounts/dev-account-alpha/security
