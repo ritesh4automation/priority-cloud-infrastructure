@@ -25,6 +25,6 @@ resource "aws_security_group" "this" {
 
   tags = {
     Environment = var.environment
-    ManagedBy   = "RiteshTerraform"
+    ManagedBy   = "Terraform"
   }
 }
