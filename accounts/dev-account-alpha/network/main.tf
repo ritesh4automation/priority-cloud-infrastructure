@@ -18,6 +18,6 @@ module "vpc" {
   tags = {
     Environment = "dev"
     Account     = "dev-account-alpha"
-    ManagedBy   = "RiteshTerraform"
+    ManagedBy   = "Terraform"
   }
 }
