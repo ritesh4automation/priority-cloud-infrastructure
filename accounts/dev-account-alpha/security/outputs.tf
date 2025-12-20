@@ -1,5 +1,5 @@
 output "security_group_id" {
-  value = module.security.id
+  value = module.security.security_group_id
 }
 
 output "security_group_name" {
