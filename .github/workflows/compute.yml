@@ -1,0 +1,45 @@
+name: Terraform Compute
+
+on:
+  push:
+    branches:
+      - main
+      - feature/**
+    paths:
+      - "modules/ec2/**"
+      - "accounts/dev-account-alpha/compute/**"
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: terraform-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::223374428235:role/github-actions-oidc-role
+          aws-region: ap-south-1
+
+      - uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        working-directory: accounts/dev-account-alpha/compute
+        run: terraform init
+
+      - name: Terraform Plan
+        working-directory: accounts/dev-account-alpha/compute
+        run: terraform plan
+
+      - name: Terraform Apply (main only)
+        if: github.ref == 'refs/heads/main'
+        working-directory: accounts/dev-account-alpha/compute
+        run: terraform apply -auto-approve
